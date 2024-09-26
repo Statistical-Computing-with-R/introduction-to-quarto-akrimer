@@ -6,7 +6,8 @@ format: html
 editor: source
 embed-resources: true
 execute:
-  echo: false
+  echo: true
+  error: true
 ---
 
 # Part Two: Exploring Quarto Documents
@@ -30,7 +31,11 @@ document will render even if there are errors.
 #| echo: true
 #| label: practicing-running-code
 
-1 + 1
+# Load a dataset into the R Environment.
+data(ToothGrowth)
+
+# Look at the summary of the variables in the dataset.
+summary(ToothGrowth)
 ```
 
 **Question 3** -- Let's spice this code up a bit. Delete `1 + 1` from the code
