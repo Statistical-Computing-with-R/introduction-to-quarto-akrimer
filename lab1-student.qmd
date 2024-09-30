@@ -2,8 +2,12 @@
 title: "Lab 1: Introduction to Quarto"
 author: "Aaron Krimer"
 date: "09/26/2024"
-format: html
+format:
+  html: 
+    code-fold: true
 editor: source
+toc: true
+theme: cosmo
 embed-resources: true
 execute:
   echo: true
@@ -20,11 +24,11 @@ provides descriptions on the options you can specify in a document's execution.
 
 **Question 1** -- Add your name and the date to the YAML. 
 
-**Question 2** -- Add an `execute` line to your YAML that includes the following
+**Question 2** -- Add an `execute` line to you        r YAML that includes the following
 options, (1) your source code is always output on the page, and (2) your
 document will render even if there are errors.
 
-## Running the Provided Code
+## Tooth Growth Dataset
 
 ```{r}
 #| eval: false
@@ -64,8 +68,25 @@ section (e.g., Tooth Growth Dataset).
 ```{r}
 #| echo: true
 #| label: creating-a-plot
+#| layout-ncol: 3
 
-plot(pressure)
+library(tidyverse)
+
+ggplot(data = ToothGrowth, 
+       mapping = aes(x = supp, y = len)) +
+  geom_boxplot() +
+  labs(x = "Supplement", 
+       y = "Length of Teeth (mm)", 
+       caption = "Figure 1: Boxplot showing the effect of supplement type on tooth length.")
+
+# Second Plot: Boxplot for Dose with a caption
+ToothGrowth %>% 
+  mutate(dose = as.factor(dose)) %>% 
+  ggplot(mapping = aes(x = dose, y = len)) +
+  geom_boxplot() +
+  labs(x = "Dose of Supplement (mg/day)", 
+       y = "Length of Teeth (mm)", 
+       caption = "Figure 2: Boxplot showing the effect of supplement dose on tooth length.")
 ```
 
 Now, run this code chunk! You should see two side-by-side boxplots, one plot
@@ -81,4 +102,25 @@ should be **center aligned**.
 
 **Question 9** -- Specify a **figure caption** for the boxplots (using a
 code-chunk option).
+
+```{r}
+library(dplyr)
+
+# Conduct the two-sample independent t-test
+t_test_result <- t.test(len ~ supp, data = ToothGrowth, var.equal = FALSE)
+
+# Display the results
+t_test_result
+```
+
+# Summary of Statistical Analysis on Tooth Lengths by Supplement Type
+
+Conclusion Based on the p-value:
+The p-value from the t-test is 0.06063. Since this p-value is slightly above the conventional significance level of 0.05, we do not reject the null hypothesis. This indicates that there is insufficient evidence to conclude that the mean tooth length for the OJ supplement delivery method is different from that of the VC supplement delivery method. However, the p-value is close to the threshold, suggesting that further investigation could be warranted.
+
+Interpretation of the Confidence Interval:
+The 95% confidence interval for the difference in means is approximately [−0.171,7.571]. This means we can be 95% confident that the true difference in mean tooth length between the OJ and VC supplements lies within this interval. Since the interval includes zero, it suggests that there is no significant difference in mean tooth lengths between the two groups at the 95% confidence level.
+
+
+
 
